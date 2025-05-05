@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lotify</title>
+        <link rel="stylesheet" href="/stylesheets/homePage.css" />
+    </head>
+
+    <body>
+        <header>
+            <a href="/" class="logo">Lotify</a>
+            <div class="search-bar">
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Пошук..."
+                    value="<%= locals.searchQuery || '' %>"
+                />
+                <button id="searchButton">Пошук</button>
+            </div>
+            <div class="profile">
+                <a href="/users/profile">Профіль</a>
+            </div>
+        </header>
+
+        <main>
+            <% if (locals.searchQuery) { %>
+            <div class="search-results-header">
+                <h2>Результати пошуку: "<%= searchQuery %>"</h2>
+                <a href="/" class="clear-search">Скасувати пошук</a>
+            </div>
+            <% } %> <% if (locals.searchNotFound) { %>
+            <div class="no-results">
+                <p>За запитом "<%= searchQuery %>" нічого не знайдено.</p>
+            </div>
+            <% } %>
+
+            <div class="lots" id="lots-container">
+                <% if (lots && lots.length > 0) { %> <% let activeLots =
+                lots.filter(lot => lot.status); %> <% if (activeLots.length > 0)
+                { %> <% activeLots.forEach(function(lot) { %>
+                <div class="lot">
+                    <img
+                        src="<%= lot.image ? lot.image : '/images/placeholder.jpg' %>"
+                        alt="<%= lot.title %>"
+                    />
+                    <h3><%= lot.title %></h3>
+                    <p class="desc"><%= lot.description %></p>
+                    <div class="price">
+                        <p>Початкова ціна: <%= lot.start_price %></p>
+                        <p>Ціна: <%= lot.current_price %></p>
+                    </div>
+                    <a class="more" href="/lots/<%= lot.id %>"
+                        >Дізнатись більше</a
+                    >
+                </div>
+                <% }); %> <% } else { %>
+                <p>Наразі немає активних лотів.</p>
+                <% } %> <% } else { %>
+                <p>На даний момент немає доступних лотів.</p>
+                <% } %>
+            </div>
+            <div id="pagination" class="pagination"></div>
+        </main>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchInput = document.getElementById('searchInput');
+                const searchButton = document.getElementById('searchButton');
+                const lotsContainer = document.getElementById('lots-container');
+
+                async function performSearch() {
+                    const searchTerm = searchInput.value.trim();
+                    if (!searchTerm) {
+                        window.location.href = '/';
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/lots/search', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ title: searchTerm }),
+                        });
+
+                        if (response.status === 404) {
+                            // Redirect to home with not found parameter
+                            window.location.href =
+                                '/?search=notfound&q=' +
+                                encodeURIComponent(searchTerm);
+                            return;
+                        }
+
+                        if (!response.ok) {
+                            throw new Error('Помилка пошуку');
+                        }
+
+                        // Redirect to home with search query
+                        window.location.href =
+                            '/?q=' + encodeURIComponent(searchTerm);
+                    } catch (error) {
+                        console.error('Search error:', error);
+                        alert(
+                            'Помилка при виконанні пошуку. Спробуйте пізніше.'
+                        );
+                    }
+                }
+
+                searchButton.addEventListener('click', performSearch);
+
+                searchInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            });
+
+            function renderPagination(totalPages, currentPage) {
+                const container = document.getElementById('pagination');
+                container.innerHTML = '';
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.textContent = i;
+
+                    if (i === currentPage) {
+                        btn.classList.add('active');
+                    }
+
+                    btn.addEventListener('click', () => {
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('page', i);
+                        window.location.href = url.toString();
+                    });
+
+                    container.appendChild(btn);
+                }
+            }
+        </script>
+    </body>
+</html>

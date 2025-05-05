@@ -1,0 +1,267 @@
+/* Загальні стилі */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fffefc;
+    color: navy;
+}
+
+/* Контейнер для вмісту */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Секція для створення лоту і лоти */
+.create-lot-section {
+    background: #f8f9fa;
+    border: 1px solid rgb(238, 238, 239);
+    padding: 25px;
+    border-radius: 10px;
+    margin: 30px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#lots-container {
+    padding: 25px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.title {
+    font-size: 30px;
+    margin-bottom: 5px;
+    color: navy;
+    font-weight: bold;
+    text-align: center;
+}
+
+.lot {
+    background-color: #f8f9fa;
+    border: 1px solid rgb(238, 238, 239);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 30%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.lot:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lot h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.lot p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #7a80a2;
+    word-wrap: break-word;
+}
+
+.status-select {
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.status-indicator {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.status-indicator.active {
+    background-color: #4caf50;
+    color: white;
+}
+
+.status-indicator.inactive {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-lot-button {
+    background-color: rgb(120, 120, 233);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-lot-button:hover {
+    background-color: #6c6ce5;
+}
+
+/* Стилі для форми */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: navy;
+}
+
+.form-group input[type='text'],
+.form-group textarea,
+.form-group input[type='number'] {
+    width: 98%;
+    padding: 10px;
+    border: 1px solid navy;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type='text']:focus,
+.form-group input[type='date']:focus,
+.form-group textarea:focus,
+.form-group input[type='number']:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgb(120, 120, 233);
+    box-shadow: 0 0 0 2px rgba(120, 120, 233, 0.2);
+}
+
+/* Стилі для селекту */
+select,
+.form-group input[type='date'] {
+    border: 1px solid navy;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    width: 150px;
+    padding: 10px;
+    color: navy;
+    cursor: pointer;
+}
+
+select option {
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Стилі для кнопки */
+button {
+    background-color: rgb(120, 120, 233);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #6c6ce5;
+}
+.disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fffefc;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+a.logo {
+    text-decoration: none;
+    color: navy;
+    display: inline-block;
+}
+
+a.logo:hover {
+    color: #0000b3;
+}
+
+.logo {
+    margin-left: 25px;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.profile a {
+    text-decoration: none;
+    font-weight: bold;
+    margin: 15px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: white;
+    position: relative;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+    top: 50px;
+}
+
+.close-modal {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #f44336;
+}
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Кнопка редагування */
+.edit-lot-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-right: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-lot-button:hover {
+    background-color: #45a049;
+}
+
+/* Стилі для кнопок дій */
+.lot-actions {
+    display: flex;
+    margin-top: 10px;
+}

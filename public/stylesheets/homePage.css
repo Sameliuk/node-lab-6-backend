@@ -1,0 +1,140 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fffefc;
+    color: navy;
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fffefc;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+a.logo {
+    text-decoration: none;
+    color: navy;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.search-bar {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search-bar input {
+    padding: 8px;
+    border: 1px solid navy;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    background-color: rgb(120, 120, 233);
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.profile a {
+    text-decoration: none;
+    font-weight: bold;
+    margin: 15px;
+}
+
+.lots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.lot {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.lot img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.lot h3 {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.desc {
+    font-size: 15px;
+    font-weight: 100;
+    word-wrap: break-word;
+}
+
+.price {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.more {
+    color: navy;
+}
+
+.offer {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background-color: rgb(120, 120, 233);
+    color: white;
+    border-radius: 5px;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-indicator.active {
+    background-color: #28a745;
+}
+
+.status-indicator.inactive {
+    background-color: #dc3545;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 8px;
+}
+
+.pagination button {
+    padding: 6px 12px;
+    font-size: 14px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.pagination button.active {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: bold;
+}

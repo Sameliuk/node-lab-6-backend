@@ -1,0 +1,97 @@
+.auth-container {
+    margin: 50px auto;
+    width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2,
+p {
+    color: navy;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+label {
+    font-size: 16px;
+    color: navy;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+}
+
+.auth-container input {
+    width: 95%;
+    height: 25px;
+    padding: 8px;
+    border: 1px solid navy;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.auth-container input:focus {
+    outline: none;
+    border-color: rgb(120, 120, 233);
+    box-shadow: 0 0 4px rgba(120, 120, 233, 0.5);
+}
+
+.auth-container button {
+    width: 100%;
+    height: 45px;
+    background-color: rgb(120, 120, 233);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.auth-container button:hover {
+    background-color: #6c6ce5;
+}
+
+input::placeholder {
+    color: rgb(161, 161, 234);
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Header */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fffefc;
+    color: navy;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fffefc;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+a.logo {
+    text-decoration: none;
+    color: navy;
+    display: inline-block;
+}
+
+a.logo:hover {
+    color: #0000b3;
+}
+
+.logo {
+    margin-left: 25px;
+    font-size: 50px;
+    font-weight: bold;
+}

@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fffefc;
+    color: navy;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fffefc;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ccc;
+}
+
+a.logo {
+    text-decoration: none;
+    color: navy;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.profile a {
+    text-decoration: none;
+    font-weight: bold;
+    margin: 15px;
+}
+.search-bar {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search-bar input {
+    padding: 8px;
+    border-color: navy;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    background-color: rgb(120, 120, 233);
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: white;
+    border-radius: 5px;
+}
+
+.container {
+    max-width: 700px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.lot-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.lot-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.lot-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.lot-image {
+    text-align: right;
+}
+
+.lot-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.lot-bid {
+    text-align: center;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.current-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8075ea;
+}
+
+.bid-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.bid-controls .btn {
+    background: #ddd;
+    border: none;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.bid-controls input {
+    width: auto;
+    min-width: 4ch;
+    max-width: 12ch;
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.bid-btn {
+    background: #8075ea;
+    color: white;
+    padding: 10px;
+    width: 50%;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bid-btn:hover {
+    background: #6a5acd;
+}
