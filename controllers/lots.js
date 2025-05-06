@@ -5,32 +5,16 @@ const Users = db.users;
 const { Op } = require('sequelize');
 
 class LotsController {
-    // Метод для отримання всіх лотів
     async getLots(req, res, returnData = false) {
         try {
-            const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 6;
-            const offset = (page - 1) * limit;
+            const lots = await Lots.findAll();
 
-            const { count, rows: lots } = await Lots.findAndCountAll({
-                offset,
-                limit,
-                order: [['id', 'DESC']],
-            });
-
-            const totalPages = Math.ceil(count / limit);
-
-            if (returnData) return lots;
+            if (returnData) {
+                return res.status(200).json(lots);
+            }
 
             if (!res.headersSent) {
-                res.json({
-                    lots,
-                    pagination: {
-                        page,
-                        totalPages,
-                        totalItems: count,
-                    },
-                });
+                res.status(200).json(lots);
             }
         } catch (error) {
             console.error(error);
@@ -40,7 +24,6 @@ class LotsController {
         }
     }
 
-    // Метод для отримання лотів за ID користувача
     async getLotsByUserId(req, res) {
         try {
             const userId = parseInt(req.params.userId);
@@ -54,7 +37,6 @@ class LotsController {
         }
     }
 
-    // Метод для оновлення статусу лоту
     async updateLotStatus(req, res) {
         try {
             const lotId = parseInt(req.params.lotId);
@@ -111,26 +93,19 @@ class LotsController {
             }
 
             const lot = await Lots.findByPk(lotId);
-
             if (!lot) {
                 return res.status(404).json({ error: 'Лот не знайдено' });
             }
 
-            const acceptHeader = req.headers.accept;
-
-            if (acceptHeader && acceptHeader.includes('application/json')) {
-                return res.json(lot);
-            }
-
             const offerCount = await Offers.count({ where: { lot_id: lotId } });
 
-            res.render('lot', {
+            res.status(200).json({
                 lot,
                 offerCount,
             });
         } catch (error) {
-            console.error(error);
-            res.status(500).send('Помилка сервера');
+            console.error('Error fetching lot:', error);
+            res.status(500).json({ error: 'Помилка сервера' });
         }
     }
 
@@ -170,7 +145,7 @@ class LotsController {
             res.status(201).json(newLot);
         } catch (error) {
             console.error('Error creating lot:', error);
-            res.status(400).json({
+            res.status(500).json({
                 error: 'Помилка створення лоту',
                 details: error.message,
             });
@@ -188,7 +163,6 @@ class LotsController {
 
             const userId = req.session.userId;
 
-            // Fetch the lot by lotId and check its user_id
             const lot = await Lots.findOne({
                 where: { id: lotId },
             });
@@ -201,7 +175,6 @@ class LotsController {
                 return res.status(403).json({ error: 'Недостатньо прав' });
             }
 
-            // Update the lot status
             await lot.update({ status: newStatus });
 
             res.json({ success: true });
@@ -211,7 +184,6 @@ class LotsController {
         }
     }
 
-    // Метод для оновлення конкретного лоту
     async updateSingleLot(req, res) {
         try {
             const lotId = parseInt(req.params.lotId);
@@ -249,14 +221,13 @@ class LotsController {
                 image,
             });
 
-            res.json(lot);
+            res.status(200).json(lot);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Помилка сервера' });
         }
     }
 
-    // Метод для видалення конкретного лоту
     async deleteSingleLot(req, res) {
         try {
             const lotId = parseInt(req.params.lotId);
@@ -282,12 +253,11 @@ class LotsController {
                 message: 'Лот та всі офери видалено успішно',
             });
         } catch (error) {
-            console.error(error);
+            console.error('Error deleting lot:', error);
             res.status(500).json({ error: 'Внутрішня помилка сервера' });
         }
     }
 
-    // Метод для пошуку лоту за назвою
     async searchLotByTitle(req, res) {
         try {
             const { title } = req.body;

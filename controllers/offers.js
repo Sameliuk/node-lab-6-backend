@@ -15,7 +15,6 @@ class OffersController {
 
             const offers = await Offers.findAll({
                 where: { lot_id: lotId },
-                order: [['createdAt', 'DESC']],
             });
 
             res.json(offers);
@@ -73,18 +72,15 @@ class OffersController {
                     .json({ error: 'Ставка має бути більшою за поточну ціну' });
             }
 
-            // Створення нової ставки
             const newOffer = await Offers.create({
                 lot_id: lotId,
                 user_id: userId,
                 offer_price: offerPrice,
             });
 
-            // Оновлення поточної ціни лота
             lot.current_price = offerPrice;
             await lot.save();
 
-            // Отримуємо кількість ставок
             const totalBids = await Offers.count({ where: { lot_id: lotId } });
 
             res.status(201).json({
@@ -96,11 +92,6 @@ class OffersController {
             console.error(error);
             res.status(500).json({ error: 'Помилка сервера' });
         }
-    }
-
-    async showCreateOfferForm(req, res) {
-        const lotId = req.query.lotId;
-        res.render('createOffer', { lotId });
     }
 }
 
