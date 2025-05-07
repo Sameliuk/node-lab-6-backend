@@ -7,7 +7,12 @@ const { Op, Sequelize } = require('sequelize');
 class LotsController {
     async getLots(req, res, returnData = false) {
         try {
-            const { startTime, endTime } = req.query;
+            const { startTime, endTime, page = 1, pageSize = 6 } = req.query;
+
+            const pageInt = parseInt(page, 10);
+            const pageSizeInt = parseInt(pageSize, 10);
+
+            const offset = (pageInt - 1) * pageSizeInt;
 
             const whereConditions = {};
 
@@ -19,14 +24,30 @@ class LotsController {
                 whereConditions.end_time = { [Op.lte]: new Date(endTime) };
             }
 
-            const lots = await Lots.findAll({ where: whereConditions });
+            const { rows, count } = await Lots.findAndCountAll({
+                where: whereConditions,
+                limit: pageSizeInt,
+                offset: offset,
+            });
+
+            const totalPages = Math.ceil(count / pageSizeInt);
+
+            const result = {
+                data: rows,
+                pagination: {
+                    totalItems: count,
+                    totalPages: totalPages,
+                    currentPage: pageInt,
+                    pageSize: pageSizeInt,
+                },
+            };
 
             if (returnData) {
-                return res.status(200).json(lots);
+                return res.status(200).json(result);
             }
 
             if (!res.headersSent) {
-                res.status(200).json(lots);
+                res.status(200).json(result);
             }
         } catch (error) {
             console.error(error);
