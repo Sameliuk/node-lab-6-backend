@@ -19,9 +19,13 @@ class UserController {
 
             req.session.userId = newUser.id;
 
-            res.status(201).json({
-                message: 'Користувач успішно зареєстрований',
-                userId: newUser.id,
+            res.status(200).json({
+                user: {
+                    id: newUser.id,
+                    fname: newUser.fname,
+                    sname: newUser.sname,
+                    lots: newUser.lots || [],
+                },
             });
         } catch (error) {
             console.error(error);
@@ -54,45 +58,6 @@ class UserController {
             }
 
             req.session.userId = user.id;
-
-            res.status(200).json({
-                message: 'Вхід успішний',
-                userId: user.id,
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                error: 'Помилка сервера',
-            });
-        }
-    }
-
-    async getUserProfile(req, res) {
-        try {
-            if (!req.session || !req.session.userId) {
-                return res.status(401).json({
-                    error: 'Користувач не авторизований',
-                });
-            }
-
-            const userId = req.session.userId;
-            const user = await Users.findByPk(userId, {
-                attributes: ['id', 'fname', 'sname'],
-                include: [
-                    {
-                        model: Lots,
-                        as: 'lots',
-                        order: [['start_time', 'DESC']],
-                    },
-                ],
-            });
-
-            if (!user) {
-                req.session.destroy();
-                return res.status(404).json({
-                    error: 'Користувача не знайдено',
-                });
-            }
 
             res.status(200).json({
                 user: {
