@@ -2,12 +2,24 @@ const db = require('../db/index');
 const Lots = db.lots;
 const Offers = db.offers;
 const Users = db.users;
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 class LotsController {
     async getLots(req, res, returnData = false) {
         try {
-            const lots = await Lots.findAll();
+            const { startTime, endTime } = req.query;
+
+            const whereConditions = {};
+
+            if (startTime !== undefined) {
+                whereConditions.start_time = { [Op.gte]: new Date(startTime) };
+            }
+
+            if (endTime !== undefined) {
+                whereConditions.end_time = { [Op.lte]: new Date(endTime) };
+            }
+
+            const lots = await Lots.findAll({ where: whereConditions });
 
             if (returnData) {
                 return res.status(200).json(lots);
