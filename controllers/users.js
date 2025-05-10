@@ -7,7 +7,6 @@ class UserController {
     async signUpHandler(req, res) {
         try {
             const { fname, sname, password } = req.body;
-
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -24,11 +23,11 @@ class UserController {
                     id: newUser.id,
                     fname: newUser.fname,
                     sname: newUser.sname,
-                    lots: newUser.lots || [],
+                    lots: [],
                 },
             });
         } catch (error) {
-            console.error(error);
+            console.error('Помилка реєстрації:', error);
             res.status(500).json({
                 error: 'Помилка при реєстрації. Спробуйте ще раз.',
             });
@@ -39,7 +38,27 @@ class UserController {
         try {
             const { fname, password } = req.body;
 
-            const user = await Users.findOne({ where: { fname } });
+            const user = await Users.findOne({
+                where: { fname },
+                include: [
+                    {
+                        model: Lots,
+                        as: 'lots',
+                        attributes: [
+                            'id',
+                            'title',
+                            'description',
+                            'start_price',
+                            'current_price',
+                            'status',
+                            'start_time',
+                            'end_time',
+                            'user_id',
+                            'image',
+                        ],
+                    },
+                ],
+            });
 
             if (!user) {
                 return res.status(401).json({
@@ -64,11 +83,11 @@ class UserController {
                     id: user.id,
                     fname: user.fname,
                     sname: user.sname,
-                    lots: user.lots || [],
+                    lots: user.lots,
                 },
             });
         } catch (error) {
-            console.error(error);
+            console.error('Помилка входу:', error);
             res.status(500).json({
                 error: 'Помилка сервера',
             });
