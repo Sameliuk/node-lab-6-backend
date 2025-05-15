@@ -1,7 +1,7 @@
 // db/Offers.js
 const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize) => { // Приймає sequelize, DataTypes можна взяти з нього або з require
+module.exports = (sequelize) => { 
     const Offer = sequelize.define('Offer', {
         id: {
             type: DataTypes.INTEGER,
@@ -43,7 +43,6 @@ module.exports = (sequelize) => { // Приймає sequelize, DataTypes мож�
         timestamps: false,
     });
 
-    // Offer.associate = (models) => { ... }; // Цей блок тепер НЕ ПОТРІБЕН тут
 
     return Offer;
 };
