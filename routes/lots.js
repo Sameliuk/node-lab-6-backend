@@ -17,6 +17,9 @@ router.post('/create', lotsController.createSingleLot);
 // Переконайтеся, що метод searchLotByTitle в controllers/lots.js тепер читає req.query.title
 router.get('/search', lotsController.searchLotByTitle);
 
+// POST метод для пошуку
+router.post('/search', lotsController.searchLotByTitle);
+
 // GET /lots/user/:userId -> Отримати лоти конкретного користувача
 // Цей маршрут більш специфічний, тому ставимо його перед /:lotId
 router.get('/user/:userId', lotsController.getLotsByUserId);

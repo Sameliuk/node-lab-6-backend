@@ -32,11 +32,6 @@ module.exports = (sequelize) => { // Приймає sequelize, DataTypes мож�
                 isDecimal: true,
                 min: 0.01
             }
-        },
-        offer_time: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-            allowNull: false,
         }
     }, {
         tableName: 'offers',
