@@ -3,7 +3,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
-var cors = require('cors'); // Додано
+var cors = require('cors'); 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,12 +13,11 @@ var app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Дозволити запити з фронтенду на порту 3000
 app.use(
     cors({
-        origin: 'http://localhost:8080', // Фронтенд на порту 3000
+        origin: 'http://localhost:8080', 
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true, // Дозволити передачу cookie
+        credentials: true, 
     })
 );
 
