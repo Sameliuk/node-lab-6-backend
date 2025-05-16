@@ -8,7 +8,7 @@ const { Op, Sequelize } = require('sequelize');
 class LotsController {
     async getLots(req, res, returnData = false) {
         try {
-            const { startTime, endTime, page = 1, pageSize = 10 } = req.query;
+            const { startTime, endTime, page = 1, pageSize = 9 } = req.query;
 
             const pageInt = parseInt(page, 10);
             const pageSizeInt = parseInt(pageSize, 10);
