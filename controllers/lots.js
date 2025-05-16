@@ -318,7 +318,7 @@ async deleteSingleLot(req, res) {
 
     async searchLotByTitle(req, res) {
         try {
-            const { title } = req.body;
+            const { title } = req.query;
 
             if (!title) {
                 return res
