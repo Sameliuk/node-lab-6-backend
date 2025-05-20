@@ -262,59 +262,114 @@ class LotsController {
         }
     }
 
-// LotsController.js
-async deleteSingleLot(req, res) {
-    console.log('-----------------------------------------');
-    console.log('[DeleteLotAttempt] Отримано DELETE запит для lotId:', req.params.lotId);
-    console.log('[DeleteLotAttempt] req.session (перед перевіркою):', JSON.stringify(req.session, null, 2));
-    console.log('[DeleteLotAttempt] req.session.userId (перед перевіркою):', req.session?.userId);
-    console.log('[DeleteLotAttempt] req.cookies (для перевірки connect.sid):', req.cookies);
-
-
-    try {
-        const lotId = parseInt(req.params.lotId);
-
-        if (!req.session || !req.session.userId) { // Більш явна перевірка
-            console.log('[DeleteLotAttempt] АВТОРИЗАЦІЯ НЕ ПРОЙШЛА: req.session.userId відсутній або недійсний.');
-            console.log('-----------------------------------------');
-            return res.status(401).json({ error: 'Необхідна авторизація (сесія не знайдена або userId відсутній)' });
-        }
-
-        const userIdFromSession = req.session.userId;
-        console.log(`[DeleteLotAttempt] UserId з сесії: ${userIdFromSession}`);
-
-        const lot = await Lots.findByPk(lotId);
-
-        if (!lot) {
-            console.log(`[DeleteLotAttempt] Лот з ID ${lotId} не знайдено.`);
-            console.log('-----------------------------------------');
-            return res.status(404).json({ error: 'Лот не знайдено' });
-        }
-        console.log(`[DeleteLotAttempt] Знайдено лот ID ${lotId}, належить user_id: ${lot.user_id}`);
-
-        if (lot.user_id !== userIdFromSession) {
-            console.log(`[DeleteLotAttempt] ПРАВА ДОСТУПУ ПОРУШЕНО: Лот належить ${lot.user_id}, користувач сесії ${userIdFromSession}.`);
-            console.log('-----------------------------------------');
-            return res.status(403).json({ error: 'Недостатньо прав для видалення цього лоту' });
-        }
-
-        console.log(`[DeleteLotAttempt] Авторизація та права доступу перевірені. Видалення оферів для лоту ID ${lotId}...`);
-        await Offers.destroy({ where: { lot_id: lotId } });
-        console.log(`[DeleteLotAttempt] Офери видалено. Видалення лоту ID ${lotId}...`);
-        await lot.destroy();
-
-        console.log(`[DeleteLotAttempt] Лот ID ${lotId} успішно видалено.`);
+    // LotsController.js
+    async deleteSingleLot(req, res) {
         console.log('-----------------------------------------');
-        return res.status(200).json({
-            message: 'Лот та всі офери видалено успішно',
-        });
+        console.log(
+            '[DeleteLotAttempt] Отримано DELETE запит для lotId:',
+            req.params.lotId
+        );
+        console.log(
+            '[DeleteLotAttempt] req.session (перед перевіркою):',
+            JSON.stringify(req.session, null, 2)
+        );
+        console.log(
+            '[DeleteLotAttempt] req.session.userId (перед перевіркою):',
+            req.session?.userId
+        );
+        console.log(
+            '[DeleteLotAttempt] req.cookies (для перевірки connect.sid):',
+            req.cookies
+        );
 
-    } catch (error) {
-        console.error('[DeleteLotAttempt] КРИТИЧНА ПОМИЛКА під час видалення лоту:', error);
-        console.log('-----------------------------------------');
-        return res.status(500).json({ error: 'Внутрішня помилка сервера під час видалення' });
+        const sequelize = db.sequelize; // Підключення до об'єкта sequelize
+
+        try {
+            const lotId = parseInt(req.params.lotId);
+
+            if (!req.session || !req.session.userId) {
+                console.log(
+                    '[DeleteLotAttempt] АВТОРИЗАЦІЯ НЕ ПРОЙШЛА: req.session.userId відсутній або недійсний.'
+                );
+                console.log('-----------------------------------------');
+                return res.status(401).json({
+                    error: 'Необхідна авторизація (сесія не знайдена або userId відсутній)',
+                });
+            }
+
+            const userIdFromSession = req.session.userId;
+            console.log(
+                `[DeleteLotAttempt] UserId з сесії: ${userIdFromSession}`
+            );
+
+            const lot = await Lots.findByPk(lotId);
+
+            if (!lot) {
+                console.log(
+                    `[DeleteLotAttempt] Лот з ID ${lotId} не знайдено.`
+                );
+                console.log('-----------------------------------------');
+                return res.status(404).json({ error: 'Лот не знайдено' });
+            }
+
+            console.log(
+                `[DeleteLotAttempt] Знайдено лот ID ${lotId}, належить user_id: ${lot.user_id}`
+            );
+
+            if (lot.user_id !== userIdFromSession) {
+                console.log(
+                    `[DeleteLotAttempt] ПРАВА ДОСТУПУ ПОРУШЕНО: Лот належить ${lot.user_id}, користувач сесії ${userIdFromSession}.`
+                );
+                console.log('-----------------------------------------');
+                return res.status(403).json({
+                    error: 'Недостатньо прав для видалення цього лоту',
+                });
+            }
+
+            const t = await sequelize.transaction(); 
+            try {
+                console.log(
+                    `[DeleteLotAttempt] Видалення оферів для лоту ID ${lotId}...`
+                );
+                await Offers.destroy({
+                    where: { lot_id: lotId },
+                    transaction: t,
+                });
+
+                console.log(`[DeleteLotAttempt] Видалення лоту ID ${lotId}...`);
+                await lot.destroy({ transaction: t });
+
+                await t.commit(); // Завершення транзакції
+
+                console.log(
+                    `[DeleteLotAttempt] Лот ID ${lotId} успішно видалено.`
+                );
+                console.log('-----------------------------------------');
+                return res.status(200).json({
+                    message: 'Лот та всі офери видалено успішно',
+                });
+            } catch (error) {
+                await t.rollback(); // Відкат транзакції у випадку помилки
+                console.error(
+                    '[DeleteLotAttempt] ПОМИЛКА транзакції під час видалення:',
+                    error
+                );
+                console.log('-----------------------------------------');
+                return res.status(500).json({
+                    error: 'Помилка під час видалення лоту та оферів (транзакція)',
+                });
+            }
+        } catch (error) {
+            console.error(
+                '[DeleteLotAttempt] КРИТИЧНА ПОМИЛКА поза транзакцією:',
+                error
+            );
+            console.log('-----------------------------------------');
+            return res
+                .status(500)
+                .json({ error: 'Внутрішня помилка сервера під час видалення' });
+        }
     }
-}
 
     async searchLotByTitle(req, res) {
         try {
