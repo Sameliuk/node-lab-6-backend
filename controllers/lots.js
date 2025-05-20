@@ -249,6 +249,7 @@ class LotsController {
                 title,
                 description,
                 start_price: startPrice,
+                current_price: startPrice,
                 status: Boolean(status),
                 start_time: startTime,
                 end_time: endTime,
